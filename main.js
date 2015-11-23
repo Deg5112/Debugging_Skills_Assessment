@@ -199,9 +199,9 @@ var actor_template = function(parent, container,index){
 		else if(current_position.left + self.distance_to_move > self.container.width()){
 		  x_shift = 1;
 		}
-		if(current_position.top - self.distance_to_move < 0){
-		  y_shift = 1;
-		
+		if(current_position.top - self.distance_to_move < 0) {
+			y_shift = 1;
+		}//added a curly brace here
 		else if(current_position.top + self.distance_to_move > self.container.height()){
 		  y_shift = -1;
 		}
