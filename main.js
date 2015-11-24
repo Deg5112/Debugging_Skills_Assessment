@@ -37,6 +37,7 @@ var game_template = function(container){
 	self.get_actor_count = function(){
 		return self.remaining_actors;
 	};
+
 	self.get_accuracy = function(){
 		return self.accuracy;
 	};
@@ -69,7 +70,7 @@ var game_template = function(container){
 	};
 	self.remove_actor = function(actor){
 		self.actors.splice(self.actors.indexOf(actor),1);
-		if(self.actors.length==0){
+		if(self.actors.length===0){
 			self.game_over();
 		}
 	};
@@ -88,11 +89,12 @@ var game_template = function(container){
 		self.accuracy = self.calculate_accuracy();
 		self.stats_handler.update_stats();	
 	};
-	self.add_hit = function(){
+	self.add_hit = function(actor){
 		self.stats.hits++;
 		self.remaining_actors--;
 		self.accuracy = self.calculate_accuracy();
 		self.stats_handler.update_stats();
+		actor.die();
 	};
 	self.play_gunshot = function(){
 		var index=0;
@@ -221,33 +223,39 @@ var actor_template = function(parent, container,index){
 
 
 	self.clicked = function(){
+		console.log(this);
 		self.add_hit();
 		self.hit_sound();
 
 	};
 
 	self.add_hit = function(){
-		self.parent.add_hit();
+		self.parent.add_hit(this);
 	};
+	//TODO
 
 	self.hit_sound = function(){
 		self.audio.play();
 	};
-
+	//actor template
 	self.die = function(){
+		console.log('die');
 		self.stop_heartbeat();
 		self.start_delete();
 	};
 
 	self.start_delete = function(){
+		console.log('start delete');
 		self.element.css('display','none');
 		setTimeout(self.full_delete,1000);
 	};
 
 	self.full_delete = function(){
+		console.log('full delete');
 		this.element.remove();
 		this.parent.remove_actor(self);
 		delete self;
+		//actor template
 	};
 
 	self.move = function(){
