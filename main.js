@@ -1,7 +1,9 @@
 var the_game = null;
 
-the_game = new game_template($('#game_container'));
-the_game.register_message_display($('#messages'));
+$(function(){
+	the_game = new game_template($('#game_container'));
+	the_game.register_message_display($('#messages'));
+});
 
 
 var game_template = function(container){
@@ -110,7 +112,7 @@ var game_template = function(container){
 		});
 		self.backdrop.click(function(){
 			self.hide_message();
-		})
+		});
 		$('body').append(self.backdrop);
 		if(self.message_container!=null){
 			self.message_container.show();
@@ -134,14 +136,14 @@ var stats_template = function(stats_container, game){
 	self.game = game;
 	self.init = function(){
 		self.update_stats();
-	}
+	};
 	self.update_stats = function(){
 		self.remaining_text.text(game.get_actor_count());
 		self.accuracy_text.text(game.get_accuracy()*100+'%');		
-	}
+	};
 	self.init();
 	return self;
-}
+};
 
 var actor_template = function(parent, container,index){
 	var self=this;
@@ -157,10 +159,11 @@ var actor_template = function(parent, container,index){
 	self.distance_to_move = null;
 	self.index=index;
 
-	self.calculate_new_heartbeat = function(){}
+	self.calculate_new_heartbeat = function(){
 		self.heartbeat_delta = Math.floor(Math.random()*self.heartbeat_variance_range*2)-self.heartbeat_variance_range;
 		return self.heartbeat_delta;
 	};
+
 	self.create_element = function(){
 		var this_element = $("<div>", {
 		  class: 'actor'
@@ -177,6 +180,8 @@ var actor_template = function(parent, container,index){
 		self.element.click(self.clicked);
 		return self.element;
 		};
+
+
 		self.place_self = function(){
 		self.container = $(container);
 		var x = Math.floor(Math.random()*(self.container.width() - self.element.width()));
@@ -189,6 +194,8 @@ var actor_template = function(parent, container,index){
 		});
 		self.container.append(self.element);
 	};
+
+
 	self.check_moves = function(){
 		var current_position = self.element.offset();
 		var x_shift = 0;
@@ -210,30 +217,38 @@ var actor_template = function(parent, container,index){
 		  y_shift: y_shift
 		};
 	};
+
+
 	self.clicked = function(){
 		self.add_hit();
 		self.hit_sound();
 
 	};
+
 	self.add_hit = function(){
 		self.parent.add_hit();
 	};
+
 	self.hit_sound = function(){
 		self.audio.play();
 	};
+
 	self.die = function(){
 		self.stop_heartbeat();
 		self.start_delete();
 	};
+
 	self.start_delete = function(){
 		self.element.css('display','none');
 		setTimeout(self.full_delete,1000);
 	};
+
 	self.full_delete = function(){
 		this.element.remove();
 		this.parent.remove_actor(self);
 		delete self;
 	};
+
 	self.move = function(){
 		var shift_values = self.check_moves();
 		var x_max = 3 + shift_values.x_shift;
@@ -247,22 +262,26 @@ var actor_template = function(parent, container,index){
 		  top: '+='+(y_dir*self.distance_to_move)+'px',
 		},self.heartbeat_time);
 	};
+
 	self.init = function(){
 		self.create_element();
 		self.place_self();
 		return self;
 	};
+
 	self.start_heartbeat = function(){
 		if(self.heartbeat_timer != null){
 		  self.stop_heartbeat();
 		}
 		self.heartbeat_timer = setTimeout(self.process_heartbeat,self.heartbeat_time);
 	};
+
 	self.process_heartbeat = function(){
 		self.move();
 		self.calculate_new_heartbeat();
 		self.start_heartbeat();
 	};
+
 	self.stop_heartbeat = function(){
 		clearTimeout(self.heartbeat_timer);
 		self.heartbeat_timer = null;
