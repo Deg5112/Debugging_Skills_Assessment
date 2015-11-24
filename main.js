@@ -207,7 +207,7 @@ var actor_template = function(parent, container,index){
 		  x_shift = 1;
 		}
 		else if(current_position.left + self.distance_to_move > self.container.width()){
-		  x_shift = 1;
+		  x_shift = -1;
 		}
 		if(current_position.top - self.distance_to_move < 0) {
 			y_shift = 1;
@@ -232,7 +232,7 @@ var actor_template = function(parent, container,index){
 	self.add_hit = function(){
 		self.parent.add_hit(this);
 	};
-	//TODO
+
 
 	self.hit_sound = function(){
 		self.audio.play();
@@ -268,7 +268,7 @@ var actor_template = function(parent, container,index){
 		var y_dir = Math.floor(Math.random()*y_max)+y_offset;
 		self.element.animate({
 		  left: '+='+(x_dir*self.distance_to_move)+'px',
-		  top: '+='+(y_dir*self.distance_to_move)+'px',
+		  top: '+='+(y_dir*self.distance_to_move)+'px'
 		},self.heartbeat_time);
 	};
 
