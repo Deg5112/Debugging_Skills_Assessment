@@ -3,6 +3,7 @@ var the_game = null;
 $(function(){
 	the_game = new game_template($('#game_container'));
 	the_game.register_message_display($('#messages'));
+
 });
 
 
@@ -139,7 +140,7 @@ var stats_template = function(stats_container, game){
 	};
 	self.update_stats = function(){
 		self.remaining_text.text(game.get_actor_count());
-		self.accuracy_text.text(game.get_accuracy()*100+'%');		
+		self.accuracy_text.text( (game.get_accuracy()*100).toFixed(2) +'%');
 	};
 	self.init();
 	return self;
